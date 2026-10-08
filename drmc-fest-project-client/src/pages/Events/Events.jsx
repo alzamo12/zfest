@@ -5,6 +5,7 @@ import EventFilters from "../../components/Event/EventFilters";
 import { getEventDate, getEventState } from "../../utils/eventFormat";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { categories } from "../../utils/categories";
 export default function Events() {
     // const { data: events = [], isPending, isError, error, refetch } = useEvents();
 
@@ -23,11 +24,13 @@ export default function Events() {
         }
     })
 
+    console.log(category)
+
     // Categories come from the data, so new ones appear automatically
-    const categories = useMemo(
-        () => [...new Set(events.map((e) => e.category).filter(Boolean))].sort(),
-        [events]
-    );
+    // const categories = useMemo(
+    //     () => [...new Set(events.map((e) => e.category).filter(Boolean))].sort(),
+    //     [events]
+    // );
 
     const filtered = useMemo(() => {
         const q = search.trim().toLowerCase();

@@ -133,14 +133,14 @@ export default function EventDetails() {
 
                             <dl className="space-y-2 text-sm">
                                 <Row label="Fee" value={formatFee(registrationFee)} />
-                                <Row label="Deadline" value={formatDateTime(schedule?.registrationDeadline)} />
+                                <Row label="Deadline" value={formatDateTime(getEventDate(event))} />
                                 <Row label="Capacity" value={maxParticipants || "Unlimited"} />
                                 {maxParticipants > 0 && <Row label="Registered" value={currentParticipants} />}
                                 {maxParticipants > 0 && <Row label="Seats left" value={state.seatsLeft} />}
                             </dl>
 
                             {maxParticipants > 0 && (
-                                <progress className="progress progress-primary w-full" value={filled} max="100" />
+                                <progress className="progress progress-primary w-full" value={filled} max={maxParticipants} />
                             )}
 
                             <button className="btn btn-primary btn-block mt-2" disabled={!state.open}>

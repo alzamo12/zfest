@@ -14,6 +14,7 @@ import {
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify"
+import { categories } from "../../utils/categories";
 const CreateFest = () => {
   const {
     register,
@@ -734,7 +735,7 @@ const CreateFest = () => {
             </div>
           </div>
 
-    
+
           {/* =================================
               5. EVENTS
           ================================= */}
@@ -895,49 +896,10 @@ const CreateFest = () => {
                               }
                             )}
                           >
-                            <option value="">
-                              Select category
-                            </option>
-
-                            <option value="programming">
-                              Programming
-                            </option>
-
-                            <option value="robotics">
-                              Robotics
-                            </option>
-
-                            <option value="quiz">
-                              Quiz
-                            </option>
-
-                            <option value="science">
-                              Science
-                            </option>
-
-                            <option value="debate">
-                              Debate
-                            </option>
-
-                            <option value="gaming">
-                              Gaming
-                            </option>
-
-                            <option value="cultural">
-                              Cultural
-                            </option>
-
-                            <option value="sports">
-                              Sports
-                            </option>
-
-                            <option value="business">
-                              Business
-                            </option>
-
-                            <option value="other">
-                              Other
-                            </option>
+                            {
+                              categories.map(category => <option className="uppercase" value={category}>{category}</option>)
+                            }
+                          
                           </select>
 
                           {errors.events?.[

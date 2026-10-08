@@ -3,10 +3,10 @@ import { eventService } from "../services/event.service.js";
 const getEvents = async (req, res) => {
     try {
         console.log('event get hit controllers')
-        const result = await eventService.getEventsFromDB(req.query.festId, req.query);
+        const result = await eventService.getEventsFromDB(req.query);
         res.status(200).json(result);
     } catch (err) {
-        res.status(500).json({ message: "Internal server error" })
+        res.status(500).json({ message: "Internal server error", err })
     }
 }
 
@@ -15,7 +15,7 @@ const getEventById = async (req, res) => {
         const result = await eventService.getEventByIdFromDB(req.params.id);
         res.status(200).json(result);
     } catch (err) {
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).send({ err });
     }
 }
 

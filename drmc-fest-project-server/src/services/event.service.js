@@ -1,22 +1,44 @@
 import { ObjectId } from "mongodb";
 import { getCollection } from "../config/db.js";
 
-const getEventsFromDB = async (festId, queries) => {
+const getEventsFromDB = async (queries) => {
     const eventCollection = await getCollection("events");
-    const { search } = queries;
+    const { search, type, fee, festId, category } = queries;
 
-    // const query = {};
+    const query = {};
 
-    if(search){
+    if (search) {
         query.name = { $regex: search, $options: "i" };
+    }
+
+    if (type === 'team' || type === 'individual') {
+        query.participationType = type
+    }
+
+    if (fee === 'free') {
+        query.registrationFee = 0
+    } else if (fee === 'paid') {
+        query.registrationFee = {
+            $gt: 0
+        }
     }
     // console.log('event get hit')
 
-    if (!festId) {
-        return await eventCollection.find({}).toArray();
+    if (festId) {
+        // return await eventCollection.find({}).toArray();
+        query.festId = new ObjectId(festId)
     }
 
-    return await eventCollection.find({ festId: new ObjectId(festId) }).toArray();
+    if (category && category!=='all') {
+        query.category = category
+    }
+
+    // if(sort)
+
+    console.log(query)
+    const result = await eventCollection.find(query, {}, {}).toArray();
+    // console.log(result)
+    return result
 };
 
 const getEventByIdFromDB = async (eventId) => {
