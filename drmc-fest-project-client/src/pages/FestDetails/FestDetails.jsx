@@ -65,8 +65,8 @@ export default function FestDetails() {
 
     return (
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-            <Link to="/" className="btn btn-ghost btn-sm mb-4">
-                ← All fests
+            <Link to="/upcoming-fests" className="btn btn-ghost btn-sm mb-4">
+                ← Back
             </Link>
 
             <div className="overflow-hidden rounded-box bg-base-200">

@@ -19,7 +19,7 @@ const router = createBrowserRouter([
                 element: <CreateFest />
             },
             {
-                path: "fests",
+                path: "upcoming-fests",
                 Component: Fests
             },
             {

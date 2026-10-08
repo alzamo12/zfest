@@ -12,9 +12,13 @@ export default function Fests() {
     const axiosPublic = useAxiosPublic();
 
     const { data: fests = [], error: queryError, refetch, isLoading: loading } = useQuery({
-        queryKey: ['fests'],
+        queryKey: ['fests', query],
         queryFn: async () => {
-            const res = await axiosPublic.get('/fests');
+            const res = await axiosPublic.get('/fests', {
+                params: {
+                    festName: query
+                }
+            });
             return res.data;
         }
     });

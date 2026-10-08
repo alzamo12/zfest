@@ -45,7 +45,7 @@ const createFest = async (req, res) => {
 
 const getFests = async(req, res) => {
 try{
-  const result = await festServices.getFestsFromDB();
+  const result = await festServices.getFestsFromDB(req.query.festName);
   res.status(200).send(result)
 }catch(err){
   res.status(500).send(err)

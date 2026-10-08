@@ -552,11 +552,11 @@ const insertFestIntoDB = async (festData, res, email) => {
     return result;
 };
 
-const getFestsFromDB = async() => {
-    const festCollection = await getCollection('fests');
-    const result = await festCollection.find({}).toArray();
-    return result
-}
+// const getFestsFromDB = async() => {
+//     const festCollection = await getCollection('fests');
+//     const result = await festCollection.find({}).toArray();
+//     return result
+// };
 
 const getFestByIdFromDB = async(id) => {
     const festCollection = await getCollection('fests');
@@ -565,6 +565,23 @@ const getFestByIdFromDB = async(id) => {
     // console.log('fest details from db:', result);
     return result
 }
+
+const getFestsFromDB = async (festName = "") => {
+    const festCollection = await getCollection("fests");
+
+    const query = festName
+        ? {
+              name: {
+                  $regex: festName,
+                  $options: "i",
+              },
+          }
+        : {};
+
+    const result = await festCollection.find(query).toArray();
+
+    return result;
+};
 
 export const festServices = {
     insertFestIntoDB,
