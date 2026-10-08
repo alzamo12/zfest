@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useMutation } from "@tanstack/react-query";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 const CreateFest = () => {
   const {
     register,
@@ -44,11 +44,6 @@ const CreateFest = () => {
       startDate: "",
       endDate: "",
       registrationDeadline: "",
-
-      // Registration
-      registrationRequired: true,
-      registrationFee: 0,
-      maxParticipants: 100,
 
       // Visibility
       visibility: "public",
@@ -88,9 +83,8 @@ const CreateFest = () => {
 
   const axiosSecure = useAxiosSecure();
 
-  const registrationRequired = watch("registrationRequired");
 
-  const {mutateAsync: createFest} = useMutation({
+  const { mutateAsync: createFest } = useMutation({
     mutationFn: async (festData) => {
       const response = await axiosSecure.post("/fests", festData);
       return response.data;
@@ -111,8 +105,8 @@ const CreateFest = () => {
       description: "",
       category: "",
       participationType: "individual",
-      maxParticipants: 50,
-      registrationFee: 0,
+      maxParticipants: "",
+      registrationFee: "",
       date: "",
       startTime: "",
       endTime: "",
@@ -740,143 +734,7 @@ const CreateFest = () => {
             </div>
           </div>
 
-          {/* =================================
-              4. REGISTRATION SETTINGS
-          ================================= */}
-
-          <div className="card bg-base-100 shadow-sm mb-6">
-            <div className="card-body">
-
-              <h2 className="text-xl font-bold mb-5">
-                Registration Settings
-              </h2>
-
-              {/* Registration Required */}
-
-              <label className="flex items-center gap-3 cursor-pointer mb-6">
-                <input
-                  type="checkbox"
-                  className="toggle toggle-primary"
-                  {...register(
-                    "registrationRequired"
-                  )}
-                />
-
-                <div>
-                  <p className="font-medium">
-                    Registration required
-                  </p>
-
-                  <p className="text-sm text-base-content/60">
-                    Participants must register before
-                    joining your fest.
-                  </p>
-                </div>
-              </label>
-
-              {registrationRequired && (
-                <div className="grid md:grid-cols-2 gap-5">
-
-                  {/* Fee */}
-
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text font-medium">
-                        Fest Registration Fee
-                      </span>
-                    </label> <br />
-
-                    <input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      className="input input-bordered w-full"
-                      {...register(
-                        "registrationFee",
-                        {
-                          valueAsNumber: true,
-                          min: {
-                            value: 0,
-                            message:
-                              "Fee cannot be negative",
-                          },
-                        }
-                      )}
-                    />
-
-                    {errors.registrationFee && (
-                      <p className="text-error text-sm mt-1">
-                        {
-                          errors.registrationFee
-                            .message
-                        }
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Max Participants */}
-
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text font-medium">
-                        Maximum Participants
-                      </span>
-                    </label> <br />
-
-                    <input
-                      type="number"
-                      min="1"
-                      className="input input-bordered w-full"
-                      {...register(
-                        "maxParticipants",
-                        {
-                          valueAsNumber: true,
-                          min: {
-                            value: 1,
-                            message:
-                              "Must be at least 1",
-                          },
-                        }
-                      )}
-                    />
-
-                    {errors.maxParticipants && (
-                      <p className="text-error text-sm mt-1">
-                        {
-                          errors.maxParticipants
-                            .message
-                        }
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Visibility */}
-
-              <div className="form-control mt-5">
-                <label className="label">
-                  <span className="label-text font-medium">
-                    Fest Visibility
-                  </span> 
-                </label><br />
-
-                <select
-                  className="select select-bordered w-full"
-                  {...register("visibility")}
-                >
-                  <option value="public">
-                    Public
-                  </option>
-
-                  <option value="private">
-                    Private
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-
+    
           {/* =================================
               5. EVENTS
           ================================= */}
@@ -971,7 +829,7 @@ const CreateFest = () => {
                                 *
                               </span>
                             </span>
-                          </label> <br/>
+                          </label> <br />
 
                           <input
                             type="text"
@@ -1020,7 +878,7 @@ const CreateFest = () => {
                                 *
                               </span>
                             </span>
-                          </label> <br/> 
+                          </label> <br />
 
                           <select
                             className={`select select-bordered w-full${errors.events?.[
@@ -1107,7 +965,7 @@ const CreateFest = () => {
                               *
                             </span>
                           </span>
-                        </label> <br/>
+                        </label> <br />
 
                         <textarea
                           rows={4}
@@ -1162,7 +1020,7 @@ const CreateFest = () => {
                             <span className="label-text font-medium">
                               Participation Type
                             </span>
-                          </label> 
+                          </label>
                           <select
                             className="select select-bordered w-full"
                             {...register(
@@ -1447,7 +1305,7 @@ const CreateFest = () => {
                           <span className="label-text font-medium">
                             Prize
                           </span>
-                        </label> <br/>
+                        </label> <br />
 
                         <input
                           type="text"
@@ -1466,7 +1324,7 @@ const CreateFest = () => {
                           <span className="label-text font-medium">
                             Rules & Instructions
                           </span>
-                        </label> <br/>
+                        </label> <br />
 
                         <textarea
                           rows={5}

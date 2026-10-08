@@ -24,12 +24,12 @@ export default function FestCard({ fest }) {
                     }}
                     className="h-full w-full object-cover"
                 />
-                <span
+                {/* <span
                     className={`badge absolute top-3 left-3 ${reg.open ? "badge-success" : "badge-neutral"
                         }`}
                 >
                     {reg.label}
-                </span>
+                </span> */}
             </figure>
 
             <div className="card-body gap-3">

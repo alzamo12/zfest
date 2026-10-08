@@ -10,6 +10,7 @@ import {
 } from "../../utils/format";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic"
+import EventCard from "../../components/Event/EventCard";
 
 const FALLBACK_IMG =
     "https://placehold.co/1200x500/e5e7eb/6b7280?text=No+cover+image";
@@ -21,7 +22,7 @@ export default function FestDetails() {
     // const [error, setError] = useState("");
     const axiosPublic = useAxiosPublic();
 
-    const { data: fest, error: queryError, refetch, isLoading: loading } = useQuery({
+    const { data: fest = {}, error: queryError, refetch, isLoading: loading } = useQuery({
         queryKey: ['festDetails'],
         queryFn: async () => {
             const res = await axiosPublic.get(`/fests/${id}`);
@@ -30,10 +31,10 @@ export default function FestDetails() {
         }
     });
 
-    const { data: events = [] } = useQuery({
+    const { data: events = [], isLoading: eventsLoading } = useQuery({
         queryKey: ['festEvents', id],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/events/${fest?._id}`);
+            const res = await axiosPublic.get(`/events?festId=${id}`);
             console.log('fest events:', res.data);
             return res.data;
         }
@@ -115,26 +116,34 @@ export default function FestDetails() {
                     <section className="mt-10">
                         <h2 className="text-xl font-semibold">
                             Events{" "}
-                            <span className="badge badge-neutral align-middle">{events.length}</span>
+                            <span className="badge badge-neutral align-middle">{events?.length}</span>
                         </h2>
 
-                        {events.length === 0 ? (
-                            <p className="mt-3 text-base-content/70">
-                                No events have been added yet.
-                            </p>
-                        ) : (
-                            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                                {events.map((ev) => (
-                                    <EventCard key={ev._id} event={ev} />
-                                ))}
-                            </div>
-                        )}
+                        {
+                            eventsLoading ? (
+                                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                                    {Array.from({ length: 4 }).map((_, i) => (
+                                        <div key={i} className="skeleton h-48 w-full"></div>
+                                    ))}
+                                </div>
+                            ) : events?.length === 0 ? (
+                                <p className="mt-3 text-base-content/70">
+                                    No events have been added yet.
+                                </p>
+                            ) : (
+                                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                                    {events?.map((ev) => (
+                                        // <EventCard key={ev._id} event={ev} />
+                                       <EventCard id={ev._id} event={ev}/>
+                                    ))}
+                                </div>
+                            )}
                     </section>
                 </div>
 
                 {/* Sidebar */}
                 <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
-                    <div className="card border border-base-300 bg-base-100 shadow-sm">
+                    {/* <div className="card border border-base-300 bg-base-100 shadow-sm">
                         <div className="card-body gap-3">
                             <h2 className="card-title">Registration</h2>
                             <span className={`badge ${reg.open ? "badge-success" : "badge-neutral"}`}>
@@ -158,7 +167,7 @@ export default function FestDetails() {
                                 {reg.open ? "Register now" : reg.label}
                             </button>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="card border border-base-300 bg-base-100 shadow-sm">
                         <div className="card-body gap-2">
@@ -194,47 +203,47 @@ export default function FestDetails() {
     );
 }
 
-function EventCard({ event }) {
-    const { name, description, category, participationType, schedule, venue, prize, registrationFee, maxParticipants, currentParticipants, rules } = event;
-    const seatsLeft = Math.max((maxParticipants || 0) - (currentParticipants || 0), 0);
+// function EventCard({ event }) {
+//     const { name, description, category, participationType, schedule, venue, prize, registrationFee, maxParticipants, currentParticipants, rules } = event;
+//     const seatsLeft = Math.max((maxParticipants || 0) - (currentParticipants || 0), 0);
+//     console.log('event details',event)
+//     return (
+//         <div className="card border border-base-300 bg-base-100">
+//             <div className="card-body gap-3 p-5">
+//                 <div className="flex items-start justify-between gap-2">
+//                     <h3 className="card-title text-lg">{name}</h3>
+//                     <span className="badge badge-primary badge-outline shrink-0">
+//                         {capitalize(category)}
+//                     </span>
+//                 </div>
 
-    return (
-        <div className="card border border-base-300 bg-base-100">
-            <div className="card-body gap-3 p-5">
-                <div className="flex items-start justify-between gap-2">
-                    <h3 className="card-title text-lg">{name}</h3>
-                    <span className="badge badge-primary badge-outline shrink-0">
-                        {capitalize(category)}
-                    </span>
-                </div>
+//                 <p className="text-sm text-base-content/70 line-clamp-3">{description}</p>
 
-                <p className="text-sm text-base-content/70 line-clamp-3">{description}</p>
+//                 <dl className="space-y-1 text-sm">
+//                     <Row label="Date" value={formatDate(schedule?.date)} />
+//                     <Row
+//                         label="Time"
+//                         value={`${formatTime(schedule?.startTime)} – ${formatTime(schedule?.endTime)}`}
+//                     />
+//                     <Row label="Venue" value={venue || "TBA"} />
+//                     <Row label="Type" value={capitalize(participationType)} />
+//                     <Row label="Fee" value={registrationFee} />
+//                     {maxParticipants > 0 && <Row label="Seats left" value={maxParticipants} />}
+//                     {prize && <Row label="Prize" value={prize} />}
+//                 </dl>
 
-                <dl className="space-y-1 text-sm">
-                    <Row label="Date" value={formatDate(schedule?.date)} />
-                    <Row
-                        label="Time"
-                        value={`${formatTime(schedule?.startTime)} – ${formatTime(schedule?.endTime)}`}
-                    />
-                    <Row label="Venue" value={venue || "TBA"} />
-                    <Row label="Type" value={capitalize(participationType)} />
-                    <Row label="Fee" value={formatFee(registrationFee)} />
-                    {maxParticipants > 0 && <Row label="Seats left" value={seatsLeft} />}
-                    {prize && <Row label="Prize" value={prize} />}
-                </dl>
-
-                {rules && (
-                    <details className="collapse collapse-arrow bg-base-200">
-                        <summary className="collapse-title min-h-0 py-2 text-sm font-medium">
-                            Rules
-                        </summary>
-                        <div className="collapse-content whitespace-pre-line text-sm">{rules}</div>
-                    </details>
-                )}
-            </div>
-        </div>
-    );
-}
+//                 {rules && (
+//                     <details className="collapse collapse-arrow bg-base-200">
+//                         <summary className="collapse-title min-h-0 py-2 text-sm font-medium">
+//                             Rules
+//                         </summary>
+//                         <div className="collapse-content whitespace-pre-line text-sm">{rules}</div>
+//                     </details>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// }
 
 const Row = ({ label, value }) => (
     <div className="flex justify-between gap-4">

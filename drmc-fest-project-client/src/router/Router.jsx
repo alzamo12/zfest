@@ -5,6 +5,7 @@ import CreateFest from "../pages/CreateFest/CreateFest";
 import Fests from "../pages/fests/Fests";
 import FestDetails from "../pages/FestDetails/FestDetails";
 import Events from "../pages/Events/Events";
+import EventDetails from "../pages/EventDetails/EventDetails";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: "events",
                 Component: Events
+            },
+            {
+                path: "events/:id",
+                Component: EventDetails
             }
         ]
     },

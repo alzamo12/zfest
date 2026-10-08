@@ -169,44 +169,6 @@ const insertFestIntoDB = async (festData, res, email) => {
         }
     }
 
-    /* ========================================
-       6. REGISTRATION VALIDATION
-    ======================================== */
-
-    const finalRegistrationFee =
-        Number(registrationFee) || 0;
-
-    const finalMaxParticipants =
-        Number(maxParticipants);
-
-    if (
-        !Number.isInteger(finalMaxParticipants) ||
-        finalMaxParticipants < 1
-    ) {
-        return res.status(400).json({
-            success: false,
-            message:
-                "Maximum participants must be at least 1",
-        });
-    }
-
-    if (finalRegistrationFee < 0) {
-        return res.status(400).json({
-            success: false,
-            message:
-                "Registration fee cannot be negative",
-        });
-    }
-
-    if (
-        visibility !== "public" &&
-        visibility !== "private"
-    ) {
-        return res.status(400).json({
-            success: false,
-            message: "Invalid visibility value",
-        });
-    }
 
     /* ========================================
        7. EVENTS VALIDATION
@@ -445,8 +407,7 @@ const insertFestIntoDB = async (festData, res, email) => {
     while (slugExists) {
         slug = `${baseSlug}-${counter}`;
 
-        slugExists = await db
-            .collection("fests")
+        slugExists = await festCollection
             .findOne({ slug });
 
         counter++;
@@ -522,19 +483,19 @@ const insertFestIntoDB = async (festData, res, email) => {
                 registrationDeadlineDate,
         },
 
-        registration: {
-            required:
-                Boolean(registrationRequired),
+        // registration: {
+        //     required:
+        //         Boolean(registrationRequired),
 
-            fee: finalRegistrationFee,
+        //     fee: finalRegistrationFee,
 
-            maxParticipants:
-                finalMaxParticipants,
+        //     maxParticipants:
+        //         finalMaxParticipants,
 
-            currentParticipants: 0,
-        },
+        //     currentParticipants: 0,
+        // },
 
-        visibility,
+        // visibility,
 
         // events: formattedEvents,
 
@@ -556,8 +517,8 @@ const insertFestIntoDB = async (festData, res, email) => {
     // Update each event with the festId    
     formattedEvents.forEach((event) => {
         event.festId = insertedFestId;
-        event.organizerName = organizerName;
-        event.schedule = { ...fest.schedule };
+        event.organizerName = fest.organizer.name;
+        // event.schedule = { ...fest.schedule };
 
     });
 

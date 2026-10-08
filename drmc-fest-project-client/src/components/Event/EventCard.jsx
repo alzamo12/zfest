@@ -31,7 +31,7 @@ export default function EventCard({ event }) {
                     <p className="text-sm text-base-content/60">by {organizerName}</p>
                 )}
 
-                <p className="line-clamp-2 text-sm text-base-content/70">{description}</p>
+                {/* <p className="line-clamp-2 text-sm text-base-content/70">{description}</p> */}
 
                 <dl className="space-y-1 text-sm">
                     <Row label="Date" value={`${formatDate(getEventDate(event))}${time ? `, ${time}` : ""}`} />

@@ -18,7 +18,7 @@ export default function Events() {
     const { data: events = [], isPending, isError, error, refetch } = useQuery({
         queryKey: ['events'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/events');
+            const res = await axiosPublic.get(`/events?search=${search}&category=${category}&type=${type}&fee=${fee}&sort=${sort}`);
             return res.data;
         }
     })

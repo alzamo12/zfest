@@ -1,8 +1,16 @@
 import { ObjectId } from "mongodb";
 import { getCollection } from "../config/db.js";
 
-const getEventsFromDB = async (festId) => {
+const getEventsFromDB = async (festId, queries) => {
     const eventCollection = await getCollection("events");
+    const { search } = queries;
+
+    // const query = {};
+
+    if(search){
+        query.name = { $regex: search, $options: "i" };
+    }
+    // console.log('event get hit')
 
     if (!festId) {
         return await eventCollection.find({}).toArray();
