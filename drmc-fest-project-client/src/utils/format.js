@@ -46,3 +46,54 @@ export const getRegistrationState = (fest) => {
         return { open: false, label: "Fully booked", seatsLeft };
     return { open: true, label: "Registration open", seatsLeft };
 };
+// "17 Oct 2026"
+// export const formatDate = (iso) =>
+//   iso
+//     ? new Date(iso).toLocaleDateString("en-GB", {
+//         day: "numeric",
+//         month: "short",
+//         year: "numeric",
+//       })
+//     : "TBA";
+
+// "14 Oct 2026, 4:40 PM"
+export const formatDateTime = (iso) =>
+    iso
+        ? new Date(iso).toLocaleString("en-GB", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        })
+        : "TBA";
+
+export const getEventDate = (event) =>
+    event?.schedule?.date || event?.schedule?.startDate;
+
+// "7:37 AM – 7:37 PM", or "" when the event has no start time
+export const getEventTimeRange = (event) => {
+    const { startTime, endTime } = event?.schedule || {};
+    if (!startTime) return "";
+    return endTime
+        ? `${formatTime(startTime)} – ${formatTime(endTime)}`
+        : formatTime(startTime);
+};
+
+// Works out whether people can still register for this event
+// Returns { open: boolean, label: string, seatsLeft: number }
+export const getEventState = (event) => {
+    const max = event.maxParticipants || 0;
+    const cur = event.currentParticipants || 0;
+    const seatsLeft = Math.max(max - cur, 0);
+    const deadline = event.schedule?.registrationDeadline;
+
+    if (event.status && event.status !== "active")
+        return { open: false, label: "Not available", seatsLeft };
+    if (deadline && new Date(deadline) < new Date())
+        return { open: false, label: "Registration closed", seatsLeft };
+    if (max && seatsLeft === 0)
+        return { open: false, label: "Fully booked", seatsLeft };
+    return { open: true, label: "Registration open", seatsLeft };
+};

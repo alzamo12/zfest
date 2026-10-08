@@ -6,6 +6,7 @@ import Fests from "../pages/fests/Fests";
 import FestDetails from "../pages/FestDetails/FestDetails";
 import Events from "../pages/Events/Events";
 import EventDetails from "../pages/EventDetails/EventDetails";
+import EventRegistration from "../pages/EventRegistration/EventRegistration";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: "events/:id",
                 Component: EventDetails
+            },
+            {
+                path: 'events/:id/register',
+                Component: EventRegistration
             }
         ]
     },

@@ -143,9 +143,9 @@ export default function EventDetails() {
                                 <progress className="progress progress-primary w-full" value={filled} max={maxParticipants} />
                             )}
 
-                            <button className="btn btn-primary btn-block mt-2" disabled={!state.open}>
+                            <Link to={`/events/${id}/register`} className="btn btn-primary btn-block mt-2" disabled={!state.open}>
                                 {state.open ? "Register now" : state.label}
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </aside>
@@ -178,7 +178,7 @@ function FestInfo({ fest, loading, failed }) {
                     )}
                     <div className="card-body gap-2">
                         <h3 className="card-title">{fest.name}</h3>
-                        <p className="line-clamp-2 text-sm text-base-content/70">{fest.shortDescription.slice(0,80)} ... ...</p>
+                        <p className="line-clamp-2 text-sm text-base-content/70">{fest.shortDescription.slice(0, 80)} ... ...</p>
                         <ul className="space-y-1 text-sm">
                             <li className="flex items-center gap-2">
                                 <CalendarIcon />
