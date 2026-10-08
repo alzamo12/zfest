@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { festRoutes } from "./routes/fest.route.js";
 
 export const app = express();
 
@@ -17,4 +18,4 @@ app.get("/", (req, res) => {
     res.send("Focus Hub API is running");
 });
 
-app.use("/api/fest",)
+app.use("/api/fests", festRoutes);

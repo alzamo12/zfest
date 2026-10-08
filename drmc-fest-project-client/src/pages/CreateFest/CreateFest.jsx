@@ -1,5 +1,4 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import axios from "axios";
 import {
   Plus,
   Trash2,
@@ -12,6 +11,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const CreateFest = () => {
   const {
@@ -85,6 +85,8 @@ const CreateFest = () => {
     name: "events",
   });
 
+  const axiosSecure = useAxiosSecure();
+
   const registrationRequired = watch("registrationRequired");
 
   /*
@@ -114,8 +116,8 @@ const CreateFest = () => {
     try {
       console.log("Form data:", data);
 
-      const response = await axios.post(
-        "/api/fests",
+      const response = await axiosSecure.post(
+        "/fests",
         data
       );
 
@@ -132,7 +134,7 @@ const CreateFest = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 py-10 px-4">
+    <div className="min-h-screen py-10 px-4">
       <div className="max-w-6xl mx-auto">
 
         {/* =================================
@@ -227,12 +229,6 @@ const CreateFest = () => {
                     : ""
                     }`}
                   {...register("coverImage", {
-                    pattern: {
-                      value:
-                        /^(https?:\/\/.*\.(?:png|jpg|jpeg|webp|gif))$/i,
-                      message:
-                        "Enter a valid image URL",
-                    },
                   })}
                 />
 

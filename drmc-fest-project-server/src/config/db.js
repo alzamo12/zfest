@@ -2,7 +2,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 import config from "./env.js";
 
 const uri = `mongodb+srv://${config.db_user}:${config.db_pass}@cluster0.g8eto.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-
+// console.log(config)
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -26,7 +26,7 @@ export const dbConnect = async () => {
 
         await dbPromise;
 
-        db = client.db("");
+        db = client.db("zfest");
         return db;
     } catch (err) {
         console.error(err);
