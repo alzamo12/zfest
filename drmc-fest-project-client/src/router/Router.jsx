@@ -4,7 +4,7 @@ import Login from "../pages/Login/Login";
 import CreateFest from "../pages/CreateFest/CreateFest";
 import Fests from "../pages/fests/Fests";
 import FestDetails from "../pages/FestDetails/FestDetails";
-
+import Events from "../pages/Events/Events";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -23,8 +23,12 @@ const router = createBrowserRouter([
                 Component: Fests
             },
             {
-                path: "/fests/:id",
+                path: "fests/:id",
                 Component: FestDetails
+            },
+            {
+                path: "events",
+                Component: Events
             }
         ]
     },

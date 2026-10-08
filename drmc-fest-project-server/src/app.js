@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { festRoutes } from "./routes/fest.route.js";
+import { eventRoutes } from "./routes/event.route.js";
 
 export const app = express();
 
@@ -19,3 +20,4 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/fests", festRoutes);
+app.use("/api/events", eventRoutes);

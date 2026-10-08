@@ -63,6 +63,7 @@ const Navbar = () => {
 
     const publicNavLinks = <>
         <li><Link to="/upcoming-fests" className=''>Upcoming Fests</Link></li>
+        <li><Link to="/events" className=''>Events</Link></li>
         <li><Link to="/about-us" className=''>About Us</Link></li>
         <li><Link to="/faq" className=''>FAQ</Link></li></>
 

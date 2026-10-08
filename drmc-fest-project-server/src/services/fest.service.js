@@ -3,6 +3,7 @@ import { getCollection } from "../config/db.js";
 import { createSlug } from "../utils/createSlug.js";
 const insertFestIntoDB = async (festData, res, email) => {
     const festCollection = await getCollection("fests");
+    const eventCollection = await getCollection("events");
     const {
         name,
         shortDescription,
@@ -535,7 +536,7 @@ const insertFestIntoDB = async (festData, res, email) => {
 
         visibility,
 
-        events: formattedEvents,
+        // events: formattedEvents,
 
         status: "draft",
 
@@ -549,6 +550,19 @@ const insertFestIntoDB = async (festData, res, email) => {
     ======================================== */
 
     const result = await festCollection.insertOne(fest);
+
+    const insertedFestId = result.insertedId;
+
+    // Update each event with the festId    
+    formattedEvents.forEach((event) => {
+        event.festId = insertedFestId;
+        event.organizerName = organizerName;
+        event.schedule = { ...fest.schedule };
+
+    });
+
+    const eventResult = await eventCollection.insertMany(formattedEvents);
+    console.log(eventResult.insertedIds);
     return result;
 };
 
@@ -558,10 +572,10 @@ const insertFestIntoDB = async (festData, res, email) => {
 //     return result
 // };
 
-const getFestByIdFromDB = async(id) => {
+const getFestByIdFromDB = async (id) => {
     const festCollection = await getCollection('fests');
     // console.log('fetching fest details for id:', id);
-    const result = await festCollection.findOne({_id: new ObjectId(id)});
+    const result = await festCollection.findOne({ _id: new ObjectId(id) });
     // console.log('fest details from db:', result);
     return result
 }
@@ -571,11 +585,11 @@ const getFestsFromDB = async (festName = "") => {
 
     const query = festName
         ? {
-              name: {
-                  $regex: festName,
-                  $options: "i",
-              },
-          }
+            name: {
+                $regex: festName,
+                $options: "i",
+            },
+        }
         : {};
 
     const result = await festCollection.find(query).toArray();

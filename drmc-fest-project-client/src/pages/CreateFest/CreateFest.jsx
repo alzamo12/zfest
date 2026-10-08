@@ -12,7 +12,8 @@ import {
   Mail,
 } from "lucide-react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-
+import { useMutation } from "@tanstack/react-query";
+import {toast} from "react-toastify"
 const CreateFest = () => {
   const {
     register,
@@ -89,6 +90,18 @@ const CreateFest = () => {
 
   const registrationRequired = watch("registrationRequired");
 
+  const {mutateAsync: createFest} = useMutation({
+    mutationFn: async (festData) => {
+      const response = await axiosSecure.post("/fests", festData);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log("Fest created successfully:", data);
+      // You can navigate to the fest details page or show a success message here
+      toast.success("Fest created successfully!");
+    }
+  });
+
   /*
    * Add a new empty event
    */
@@ -116,10 +129,11 @@ const CreateFest = () => {
     try {
       console.log("Form data:", data);
 
-      const response = await axiosSecure.post(
-        "/fests",
-        data
-      );
+      // const response = await axiosSecure.post(
+      //   "/fests",
+      //   data
+      // );
+      const response = await createFest(data);
 
       console.log(response.data);
 

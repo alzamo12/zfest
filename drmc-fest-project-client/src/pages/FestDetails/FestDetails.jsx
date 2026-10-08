@@ -30,6 +30,15 @@ export default function FestDetails() {
         }
     });
 
+    const { data: events = [] } = useQuery({
+        queryKey: ['festEvents', id],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/events/${fest?._id}`);
+            console.log('fest events:', res.data);
+            return res.data;
+        }
+    });
+
     // useEffect(() => {
     //     const controller = new AbortController();
     //     setError("");
@@ -60,7 +69,7 @@ export default function FestDetails() {
         );
     }
 
-    const { name, description, coverImage, organizer, location, schedule, registration, events = [] } = fest;
+    const { name, description, coverImage, organizer, location, schedule, registration } = fest;
     const reg = getRegistrationState(fest);
 
     return (
